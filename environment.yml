@@ -1,0 +1,10 @@
+name: newkg-env
+channels:
+  - defaults
+dependencies:
+  - python=3.10
+  - numpy=1.23.5
+  - pip
+  - pip:
+      - node2vec==0.4.6
+      - gensim==4.3.0
