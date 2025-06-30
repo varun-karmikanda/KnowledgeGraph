@@ -2,3 +2,4 @@ numpy==1.23.5
 networkx==2.8.8
 gensim==3.8.3
 node2vec==0.3.3
+scikit-learn==1.4.2

@@ -36,7 +36,10 @@ def draw_sampled_kg(G, limit=300):
     plt.title("Sampled Knowledge Graph with Verb Edge Labels", fontsize=20)
     plt.axis("off")
     plt.tight_layout()
-    plt.show()
+    #plt.show()
+    plt.savefig("outputs/kg_visualization.png", dpi=300)
+    print("[✓] Saved visualization to outputs/kg_visualization.png")
+
 
 # --- Call the drawing function ---
 draw_sampled_kg(G, limit=300)
