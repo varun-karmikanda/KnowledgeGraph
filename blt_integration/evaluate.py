@@ -1,5 +1,8 @@
 import json
 from sklearn.metrics import precision_score, recall_score, f1_score
+import spacy
+
+PRONOUNS = {"i", "he", "she", "it", "they", "we", "you", "one", "this", "that", "these", "those", "who", "what", "which", "him", "her", "them", "my", "your", "his", "their", "our", "me"}
 
 # Load predicted and ground truth
 with open("outputs/predicted_boundaries.json") as f:
@@ -15,12 +18,31 @@ correct_sent = 0
 total_pred = 0
 total_gt = 0
 
+nlp = spacy.load("en_core_web_sm")
+
+def extract_entities(sentence):
+    doc = nlp(sentence)
+    entities = set()
+    # Named entities
+    for ent in doc.ents:
+        entities.add(ent.text.lower())
+    # Noun chunks
+    for chunk in doc.noun_chunks:
+        entities.add(chunk.text.lower())
+    return entities
+
 for p in pred:
     sid = str(p["sentence_id"])
-    pred_nodes = set(p["path"])
+    pred_nodes = set(w for w in p["path"] if w.lower() not in PRONOUNS)
     if sid not in gt_map:
         continue
     true_nodes = gt_map[sid]
+
+    # Print mismatches for debugging
+    if pred_nodes != true_nodes:
+        print(f"Sentence ID: {sid}")
+        print(f"Predicted: {pred_nodes}")
+        print(f"Ground Truth: {true_nodes}\n")
 
     # Precision, recall, F1 per sentence
     tp = len(pred_nodes & true_nodes)
